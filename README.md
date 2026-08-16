@@ -28,6 +28,12 @@ Ao final da trilha, o projeto deverá permitir:
 
 ### Utilizadas atualmente
 
+<div align="center">
+
+<img src="https://skillicons.dev/icons?i=js,nextjs,react,css,pnpm,git,github&theme=dark" alt="JavaScript, Next.js, React, CSS, pnpm, Git e GitHub" />
+
+</div>
+
 - Next.js `16.3.1`;
 - React `19.2.8`;
 - JavaScript;
@@ -36,6 +42,12 @@ Ao final da trilha, o projeto deverá permitir:
 - Git e GitHub.
 
 ### Planejadas para as próximas etapas
+
+<div align="center">
+
+<img src="https://skillicons.dev/icons?i=ts,postgres,prisma,firebase,vercel&theme=dark" alt="TypeScript, PostgreSQL, Prisma, Firebase e Vercel" />
+
+</div>
 
 - TypeScript;
 - PostgreSQL;
