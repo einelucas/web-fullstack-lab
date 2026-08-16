@@ -1,5 +1,6 @@
 "use client";
 
+import Navegacao from "@/components/Navegacao";
 import { useState } from "react";
 import styles from "./page.module.css";
 
@@ -24,6 +25,7 @@ export default function Home() {
         <button className={styles.button} onClick={iniciarSessao}>
           {iniciado ? "Reiniciar!" : "começar"}
         </button>
+        <Navegacao />
       </section>
     </main>
   );
