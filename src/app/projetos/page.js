@@ -5,7 +5,7 @@ export default function ProjetosPage() {
     <main>
       <Navegacao />
 
-      <h1>Meus Projeto</h1>
+      <h1>Meus Projetos</h1>
       <p>Aqui ficarão os projetos cadastrados.</p>
     </main>
   );
