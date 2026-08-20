@@ -4,9 +4,9 @@ Laboratório prático criado para aprender desenvolvimento full-stack entendendo
 
 O projeto evoluirá, sessão por sessão, para um **gerenciador de projetos e tarefas** completo construído com Next.js.
 
-> **Progresso atual:** Sessão 2 concluída  
-> **Próximo passo:** Sessão 3 — layout compartilhado, `children`, CSS do componente e `props`  
-> **Última atualização:** 16 de agosto de 2026
+> **Progresso atual:** Sessão 3 concluída
+> **Próximo passo:** Sessão 4 — arrays, `map()` e renderização de listas
+> **Última atualização:** 20 de agosto de 2026
 
 ## Objetivo
 
@@ -59,11 +59,11 @@ Ao final da trilha, o projeto deverá permitir:
 
 ## Rotas disponíveis
 
-| Rota | Arquivo | Função atual |
-| --- | --- | --- |
-| `/` | `src/app/page.js` | Página inicial interativa |
-| `/projetos` | `src/app/projetos/page.js` | Listagem futura de projetos |
-| `/projetos/novo` | `src/app/projetos/novo/page.js` | Cadastro futuro de projetos |
+| Rota             | Arquivo                         | Função atual                                     |
+| ---------------- | ------------------------------- | ------------------------------------------------ |
+| `/`              | `src/app/page.js`               | Página inicial interativa                        |
+| `/projetos`      | `src/app/projetos/page.js`      | Exibição dos projetos usando componentes e props |
+| `/projetos/novo` | `src/app/projetos/novo/page.js` | Cadastro futuro de projetos                      |
 
 ## Progresso por sessão
 
@@ -97,28 +97,45 @@ Ao final da trilha, o projeto deverá permitir:
 
 ### Sessão 3 — Layout compartilhado e propriedades
 
-- [ ] Entender a responsabilidade de `src/app/layout.js`;
-- [ ] entender como o Next.js utiliza `children`;
-- [ ] colocar a navegação no layout compartilhado;
-- [ ] remover a repetição da navegação nas páginas;
-- [ ] criar um CSS Module próprio para a navegação;
-- [ ] criar um componente que recebe dados por `props`;
-- [ ] realizar o exercício prático;
+- [x] Entender a responsabilidade de `src/app/layout.js`;
+- [x] entender como o Next.js utiliza `children`;
+- [x] colocar a navegação no layout compartilhado;
+- [x] remover a repetição da navegação nas páginas;
+- [x] criar um CSS Module próprio para a navegação;
+- [x] entender a separação entre estrutura e estilo de um componente;
+- [x] criar `src/components/CardProjeto.js`;
+- [x] entender o conceito de `props`;
+- [x] passar dados de uma página para um componente;
+- [x] reutilizar `CardProjeto` para exibir projetos diferentes;
+- [x] trabalhar com as props `nome`, `descricao` e `tecnologia`;
+- [x] realizar o exercício prático;
+- [x] revisar as alterações com `git diff`;
+- [x] preparar o fechamento da sessão com Git.
+
+### Sessão 4 — Arrays e renderização de listas
+
+- [ ] Entender o que é um array em JavaScript;
+- [ ] representar projetos como objetos dentro de um array;
+- [ ] entender o funcionamento de `map()`;
+- [ ] gerar componentes automaticamente a partir de dados;
+- [ ] entender por que React utiliza a propriedade `key`;
+- [ ] remover a repetição manual dos componentes `CardProjeto`;
+- [ ] realizar exercício prático;
 - [ ] revisar o `diff`, criar o commit e enviar ao GitHub.
 
 ## Trilha completa
 
-| Etapa | Conteúdo principal | Situação |
-| --- | --- | --- |
-| 1. Fundamentos e estrutura | terminal, Next.js, App Router, JSX, CSS Modules e Git | Em andamento |
-| 2. Rotas e componentes | rotas, `Link`, layouts, `children`, props e composição | Em andamento |
-| 3. React e interatividade | estado, eventos, listas, formulários, filtros e imutabilidade | Não iniciada |
-| 4. Arquitetura do Next.js | Server e Client Components, fluxo de dados, loading e erros | Não iniciada |
-| 5. Backend e APIs | HTTP, Route Handlers, JSON, validação e tratamento de erros | Não iniciada |
-| 6. Prisma e PostgreSQL | modelagem, migrations, relações, CRUD, filtros e transações | Não iniciada |
-| 7. Firebase e autenticação | cadastro, login, sessão, identidade e rotas protegidas | Não iniciada |
-| 8. Qualidade e segurança | TypeScript, testes, autorização, acessibilidade e desempenho | Não iniciada |
-| 9. GitHub e publicação | branches, Pull Requests, documentação, deploy e logs | Não iniciada |
+| Etapa                      | Conteúdo principal                                            | Situação     |
+| -------------------------- | ------------------------------------------------------------- | ------------ |
+| 1. Fundamentos e estrutura | terminal, Next.js, App Router, JSX, CSS Modules e Git         | Concluída    |
+| 2. Rotas e componentes     | rotas, `Link`, layouts, `children`, props e composição        | Em andamento |
+| 3. React e interatividade  | estado, eventos, listas, formulários, filtros e imutabilidade | Iniciando    |
+| 4. Arquitetura do Next.js  | Server e Client Components, fluxo de dados, loading e erros   | Não iniciada |
+| 5. Backend e APIs          | HTTP, Route Handlers, JSON, validação e tratamento de erros   | Não iniciada |
+| 6. Prisma e PostgreSQL     | modelagem, migrations, relações, CRUD, filtros e transações   | Não iniciada |
+| 7. Firebase e autenticação | cadastro, login, sessão, identidade e rotas protegidas        | Não iniciada |
+| 8. Qualidade e segurança   | TypeScript, testes, autorização, acessibilidade e desempenho  | Não iniciada |
+| 9. GitHub e publicação     | branches, Pull Requests, documentação, deploy e logs          | Não iniciada |
 
 > A trilha é uma referência, não uma corrida. Uma sessão pode ocupar mais de um encontro quando o assunto exigir prática.
 
@@ -144,7 +161,7 @@ pnpm install
 pnpm dev
 ```
 
-Acesse [http://localhost:3000](http://localhost:3000).
+Acesse `http://localhost:3000`.
 
 ### Outros comandos
 
@@ -166,9 +183,106 @@ src/
 │       ├── page.js
 │       └── novo/
 │           └── page.js
+│
 └── components/
-    └── Navegacao.js
+    ├── CardProjeto.js
+    ├── Navegacao.js
+    └── Navegacao.module.css
 ```
+
+### Responsabilidade dos principais arquivos
+
+```text
+src/app/layout.js
+└── estrutura compartilhada entre todas as páginas
+    └── Navegacao
+
+src/app/page.js
+└── página inicial
+
+src/app/projetos/page.js
+└── página que fornece os dados dos projetos
+
+src/components/Navegacao.js
+└── componente reutilizável responsável pela navegação
+
+src/components/Navegacao.module.css
+└── estilos exclusivos da navegação
+
+src/components/CardProjeto.js
+└── componente reutilizável que recebe dados através de props
+```
+
+## Conceitos aprendidos até agora
+
+### Rotas
+
+No App Router do Next.js, pastas dentro de `src/app` combinadas com arquivos `page.js` formam URLs.
+
+```text
+src/app/page.js
+→ /
+
+src/app/projetos/page.js
+→ /projetos
+
+src/app/projetos/novo/page.js
+→ /projetos/novo
+```
+
+### Layout compartilhado
+
+O arquivo `src/app/layout.js` envolve as páginas da aplicação.
+
+A navegação foi movida para o layout para evitar repetição:
+
+```text
+layout.js
+├── Navegacao
+└── children
+    └── página atual
+```
+
+`children` representa o conteúdo da página que o Next.js deve renderizar naquele momento.
+
+### Componentes
+
+Componentes permitem separar partes da interface e reutilizá-las.
+
+Atualmente existem:
+
+- `Navegacao`;
+- `CardProjeto`.
+
+### Props
+
+Props permitem enviar dados para um componente reutilizável.
+
+Exemplo:
+
+```jsx
+<CardProjeto
+  nome="Web Full-Stack Lab"
+  descricao="Projeto utilizado para estudar desenvolvimento full-stack."
+  tecnologia="Next.js"
+/>
+```
+
+O componente recebe esses valores:
+
+```jsx
+export default function CardProjeto({ nome, descricao, tecnologia }) {
+  return (
+    <article>
+      <h2>{nome}</h2>
+      <p>{descricao}</p>
+      <p>Tecnologia: {tecnologia}</p>
+    </article>
+  );
+}
+```
+
+Assim, a estrutura do card permanece a mesma enquanto os dados podem mudar.
 
 ## Método de cada sessão
 
@@ -183,7 +297,12 @@ Cada sessão segue este ciclo:
 7. commit e envio ao GitHub;
 8. atualização deste README.
 
-Para evitar ambiguidades, toda orientação prática deve informar o caminho completo do arquivo, a ação exata, se o código é completo ou parcial e o resultado esperado.
+Para evitar ambiguidades, toda orientação prática deve informar:
+
+- o caminho completo do arquivo;
+- a ação exata;
+- se o código apresentado é completo ou parcial;
+- o resultado esperado antes de avançar.
 
 ## Histórico das sessões
 
@@ -191,6 +310,31 @@ Para evitar ambiguidades, toda orientação prática deve informar o caminho com
 - [Sessão 2 — rotas e navegação reutilizável](https://github.com/einelucas/web-fullstack-lab/commit/a52da537d0e9b67204cb44e0b80bdb7207944888)
 - [Correção da rota de novo projeto](https://github.com/einelucas/web-fullstack-lab/commit/537b3f4793a93086277e0580855d84d0fbad06b1)
 - [Implementação da página de novo projeto](https://github.com/einelucas/web-fullstack-lab/commit/4152813e4a9f2d9d5847bc7628bff3ba96257303)
+- [Checkpoint — progresso da Sessão 3](https://github.com/einelucas/web-fullstack-lab/commit/847f40225d560752cf1cde62fe2808bb3abe5360)
+
+## Próximo passo
+
+Na Sessão 4, os projetos deixarão de ser escritos manualmente assim:
+
+```jsx
+<CardProjeto ... />
+<CardProjeto ... />
+<CardProjeto ... />
+```
+
+e passarão a existir como dados:
+
+```text
+Array de projetos
+       ↓
+     map()
+       ↓
+CardProjeto
+CardProjeto
+CardProjeto
+```
+
+Isso será a base para posteriormente adicionar, remover, editar, filtrar e persistir projetos.
 
 ## Critério de conclusão
 
