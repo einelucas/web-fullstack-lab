@@ -1,0 +1,326 @@
+# Web Full-Stack Lab — Sessão 4
+
+## Arrays, objetos, `map()` e renderização de listas
+
+**Duração estimada:** 30 a 60 minutos  
+**Pré-requisito:** Sessão 3 concluída  
+**Arquivo principal:** `src/app/projetos/page.js`  
+**Data de preparação:** 15 de setembro de 2026
+
+## Resultado da sessão
+
+Ao final, a página `/projetos` continuará exibindo os mesmos cards, mas os dados deixarão de ficar repetidos dentro do JSX. Cada projeto será representado por um objeto, todos os objetos ficarão dentro de um array e o método `map()` criará um `CardProjeto` para cada item.
+
+```text
+Array de projetos
+       ↓
+     map()
+       ↓
+CardProjeto + CardProjeto + CardProjeto
+```
+
+Você deverá conseguir explicar:
+
+- o que é um array;
+- o que é um objeto;
+- o que o `map()` recebe e devolve;
+- por que o React exige uma `key` em listas;
+- por que os dados ficam na página e a aparência fica no componente.
+
+## 1. Antes de alterar o código
+
+No terminal do VS Code, dentro da pasta `web-fullstack-lab`, execute:
+
+```bash
+git status
+git pull
+pnpm dev
+```
+
+Abra `http://localhost:3000/projetos` e confirme que aparecem estes dois projetos:
+
+- Web Full-Stack Lab;
+- SmartPlate.
+
+O `git status` deve informar que não há alterações pendentes. Se houver arquivos modificados que você não reconhece, pare antes de continuar para não misturar trabalhos diferentes.
+
+## 2. O problema atual
+
+Hoje, `src/app/projetos/page.js` chama o mesmo componente manualmente duas vezes:
+
+```jsx
+<CardProjeto
+  nome="Web Full-Stack Lab"
+  descricao="Projeto utilizado para estudar desenvolvimento full-stack."
+  tecnologia="Next.js"
+/>
+
+<CardProjeto
+  nome="SmartPlate"
+  descricao="Aplicação de planejamento alimentar com inteligência artificial."
+  tecnologia="Next.js + OpenAI"
+/>
+```
+
+Isso funciona, mas mistura duas responsabilidades:
+
+- armazenar os dados dos projetos;
+- decidir como cada projeto será exibido.
+
+Com poucos projetos, a repetição parece pequena. Com 50 projetos, seriam 50 chamadas escritas manualmente. Além disso, adicionar, remover, filtrar ou buscar projetos ficaria mais difícil.
+
+## 3. Array e objeto
+
+Um **objeto** agrupa informações relacionadas a uma única coisa:
+
+```js
+{
+  id: 1,
+  nome: "Web Full-Stack Lab",
+  descricao: "Projeto utilizado para estudar desenvolvimento full-stack.",
+  tecnologia: "Next.js",
+}
+```
+
+Nesse objeto:
+
+- `id`, `nome`, `descricao` e `tecnologia` são propriedades;
+- os textos e o número são os valores dessas propriedades;
+- o objeto inteiro representa um projeto.
+
+Um **array** é uma coleção ordenada de valores. Podemos guardar vários objetos de projeto dentro dele:
+
+```js
+const projetos = [
+  { id: 1, nome: "Web Full-Stack Lab" },
+  { id: 2, nome: "SmartPlate" },
+];
+```
+
+Os colchetes `[]` delimitam o array. As chaves `{}` delimitam cada objeto.
+
+## 4. Implementação guiada
+
+Abra o arquivo:
+
+```text
+src/app/projetos/page.js
+```
+
+Substitua **todo o conteúdo** pelo código abaixo:
+
+```jsx
+import CardProjeto from "@/components/CardProjeto";
+
+const projetos = [
+  {
+    id: 1,
+    nome: "Web Full-Stack Lab",
+    descricao: "Projeto utilizado para estudar desenvolvimento full-stack.",
+    tecnologia: "Next.js",
+  },
+  {
+    id: 2,
+    nome: "SmartPlate",
+    descricao:
+      "Aplicação de planejamento alimentar com inteligência artificial.",
+    tecnologia: "Next.js + OpenAI",
+  },
+];
+
+export default function ProjetosPage() {
+  return (
+    <main>
+      <h1>Meus Projetos</h1>
+      <p>Aqui ficarão os projetos cadastrados.</p>
+
+      {projetos.map((projeto) => (
+        <CardProjeto
+          key={projeto.id}
+          nome={projeto.nome}
+          descricao={projeto.descricao}
+          tecnologia={projeto.tecnologia}
+        />
+      ))}
+    </main>
+  );
+}
+```
+
+Salve o arquivo e observe a página. O resultado visual deve continuar igual: dois cards com conteúdos diferentes.
+
+Essa ausência de mudança visual é esperada. Nesta sessão estamos melhorando a forma como os dados são organizados e renderizados.
+
+## 5. Entendendo o `map()`
+
+O trecho central é:
+
+```jsx
+{
+  projetos.map((projeto) => (
+    <CardProjeto
+      key={projeto.id}
+      nome={projeto.nome}
+      descricao={projeto.descricao}
+      tecnologia={projeto.tecnologia}
+    />
+  ));
+}
+```
+
+Leia esse código assim:
+
+> Para cada `projeto` existente no array `projetos`, devolva um componente `CardProjeto` preenchido com os dados desse projeto.
+
+O processo acontece desta forma:
+
+1. o `map()` acessa o primeiro objeto;
+2. esse objeto recebe temporariamente o nome `projeto`;
+3. o código devolve um `CardProjeto` com os valores do primeiro objeto;
+4. o processo se repete para o segundo objeto;
+5. o resultado é uma nova lista de componentes React.
+
+O nome `projeto` poderia ser outro, mas usar o singular do nome do array deixa o código fácil de ler:
+
+```js
+projetos.map((projeto) => ...)
+```
+
+### Por que existem chaves externas no JSX?
+
+Dentro do retorno do componente, as chaves abaixo permitem executar JavaScript:
+
+```jsx
+{projetos.map(...) }
+```
+
+Sem essas chaves, o React trataria o conteúdo como parte comum do JSX.
+
+### Por que usar `map()` e não `forEach()`?
+
+O `map()` produz um novo array com o resultado de cada item. Aqui, esse resultado é um conjunto de componentes. O `forEach()` apenas percorre os itens e não devolve essa nova lista, por isso não é a escolha adequada para esta renderização.
+
+## 6. Entendendo a `key`
+
+Ao gerar uma lista, o React precisa identificar cada elemento de forma estável:
+
+```jsx
+key={projeto.id}
+```
+
+A `key` ajuda o React a reconhecer qual projeto foi adicionado, removido, alterado ou reposicionado durante uma atualização da interface.
+
+Regras importantes:
+
+- deve ser única entre os itens daquela lista;
+- deve ser estável, sem mudar a cada renderização;
+- um identificador do próprio dado é a melhor opção;
+- não use `Math.random()`;
+- evite usar a posição do item (`index`) quando a lista poderá mudar.
+
+A `key` tem uma função interna no React. Ela não é recebida pelo `CardProjeto` como uma prop comum.
+
+## 7. Separação de responsabilidades
+
+Depois da alteração, cada parte tem um papel claro:
+
+| Local          | Responsabilidade                         |
+| -------------- | ---------------------------------------- |
+| `projetos`     | guardar temporariamente os dados         |
+| `ProjetosPage` | percorrer os dados e montar a página     |
+| `CardProjeto`  | definir a estrutura visual de um projeto |
+| `props`        | transportar os valores até o componente  |
+| `key`          | identificar cada item para o React       |
+
+Os dados ainda são temporários e estão escritos no código. Mais adiante, o array será substituído por dados vindos da API e do PostgreSQL. O componente poderá continuar sendo usado.
+
+## 8. Exercício prático
+
+Sem copiar uma nova chamada de `<CardProjeto />`, adicione ao array um terceiro projeto:
+
+```js
+{
+  id: 3,
+  nome: "Central de Indicadores",
+  descricao: "Painel para acompanhamento de indicadores corporativos.",
+  tecnologia: "Nuxt + FastAPI",
+},
+```
+
+Coloque o objeto depois do SmartPlate, ainda dentro do array `projetos`.
+
+Resultado esperado:
+
+- a página passa a mostrar três cards;
+- o JSX continua contendo uma única chamada de `CardProjeto`;
+- cada objeto possui um `id` diferente;
+- não é necessário alterar `CardProjeto.js`.
+
+### Pergunta de verificação
+
+Se você adicionar dez objetos ao array, quantas chamadas de `<CardProjeto />` precisam existir dentro do `map()`?
+
+Resposta esperada: apenas uma. O `map()` reutiliza essa estrutura para todos os objetos.
+
+## 9. Testes da sessão
+
+No navegador, confirme:
+
+- `/projetos` abre sem erro;
+- os três projetos são exibidos;
+- cada card mostra nome, descrição e tecnologia corretos;
+- os links da navegação continuam funcionando;
+- o console do navegador não apresenta aviso de `key`.
+
+No terminal, execute:
+
+```bash
+pnpm lint
+pnpm build
+```
+
+Os dois comandos devem terminar sem erros.
+
+## 10. Revisão antes do commit
+
+Execute:
+
+```bash
+git status
+git diff
+```
+
+No `diff`, confirme que:
+
+- apenas as mudanças desta sessão aparecem;
+- foi criado um array chamado `projetos`;
+- os projetos repetidos no JSX foram removidos;
+- o `map()` contém `key={projeto.id}`;
+- o terceiro projeto foi adicionado como objeto.
+
+Depois, versione a atividade:
+
+```bash
+git add src/app/projetos/page.js
+git commit -m "feat: renderiza lista de projetos com map"
+git push
+```
+
+## 11. Checklist de conclusão
+
+- [ ] Entendi a diferença entre array e objeto;
+- [ ] representei cada projeto como um objeto;
+- [ ] agrupei os objetos no array `projetos`;
+- [ ] usei `map()` para gerar os cards;
+- [ ] usei uma `key` única e estável;
+- [ ] adicionei o terceiro projeto sem repetir JSX;
+- [ ] testei a página no navegador;
+- [ ] executei `pnpm lint` e `pnpm build`;
+- [ ] revisei o `git diff`;
+- [ ] criei o commit e fiz o push.
+
+## 12. Fechamento
+
+Nesta sessão, a lista deixou de ser uma repetição manual de componentes e passou a ser gerada a partir de dados. Esse padrão aparece em praticamente toda aplicação React: produtos de uma loja, mensagens, usuários, tarefas, notificações e linhas de uma tabela normalmente começam como listas de dados transformadas em componentes.
+
+Depois que esta sessão estiver concluída e compreendida, o próximo passo natural será usar o `id` de cada projeto para criar rotas dinâmicas como `/projetos/1`, preparando uma página de detalhes para cada item.
