@@ -4,9 +4,9 @@ Laboratório prático criado para aprender desenvolvimento full-stack entendendo
 
 O projeto evoluirá, sessão por sessão, para um **gerenciador de projetos e tarefas** completo construído com Next.js.
 
-> **Progresso atual:** Sessão 3 concluída
-> **Próximo passo:** Sessão 4 — arrays, `map()` e renderização de listas
-> **Última atualização:** 20 de agosto de 2026
+> **Progresso atual:** Sessão 4 concluída
+> **Próximo passo:** Sessão 5 — rotas dinâmicas e página de detalhes
+> **Última atualização:** 15 de setembro de 2026
 
 ## Objetivo
 
@@ -59,11 +59,11 @@ Ao final da trilha, o projeto deverá permitir:
 
 ## Rotas disponíveis
 
-| Rota             | Arquivo                         | Função atual                                     |
-| ---------------- | ------------------------------- | ------------------------------------------------ |
-| `/`              | `src/app/page.js`               | Página inicial interativa                        |
-| `/projetos`      | `src/app/projetos/page.js`      | Exibição dos projetos usando componentes e props |
-| `/projetos/novo` | `src/app/projetos/novo/page.js` | Cadastro futuro de projetos                      |
+| Rota             | Arquivo                         | Função atual                                      |
+| ---------------- | ------------------------------- | ------------------------------------------------- |
+| `/`              | `src/app/page.js`               | Página inicial interativa                         |
+| `/projetos`      | `src/app/projetos/page.js`      | Lista de projetos renderizada com array e `map()` |
+| `/projetos/novo` | `src/app/projetos/novo/page.js` | Cadastro futuro de projetos                       |
 
 ## Progresso por sessão
 
@@ -114,12 +114,25 @@ Ao final da trilha, o projeto deverá permitir:
 
 ### Sessão 4 — Arrays e renderização de listas
 
-- [ ] Entender o que é um array em JavaScript;
-- [ ] representar projetos como objetos dentro de um array;
-- [ ] entender o funcionamento de `map()`;
-- [ ] gerar componentes automaticamente a partir de dados;
-- [ ] entender por que React utiliza a propriedade `key`;
-- [ ] remover a repetição manual dos componentes `CardProjeto`;
+- [x] Entender o que é um array em JavaScript;
+- [x] representar projetos como objetos dentro de um array;
+- [x] entender o funcionamento de `map()`;
+- [x] gerar componentes automaticamente a partir de dados;
+- [x] entender por que React utiliza a propriedade `key`;
+- [x] remover a repetição manual dos componentes `CardProjeto`;
+- [x] adicionar um terceiro projeto sem repetir JSX;
+- [x] realizar exercício prático;
+- [x] revisar o `diff`, criar o commit e enviar ao GitHub.
+
+### Sessão 5 — Rotas dinâmicas e página de detalhes
+
+- [ ] Entender o que é um segmento dinâmico no App Router;
+- [ ] criar a rota `src/app/projetos/[id]/page.js`;
+- [ ] entender como o valor de `id` chega à página por meio de `params`;
+- [ ] localizar um projeto pelo identificador;
+- [ ] criar uma página de detalhes reutilizável;
+- [ ] conectar cada card à rota do respectivo projeto;
+- [ ] lidar com um identificador que não existe;
 - [ ] realizar exercício prático;
 - [ ] revisar o `diff`, criar o commit e enviar ao GitHub.
 
@@ -128,8 +141,8 @@ Ao final da trilha, o projeto deverá permitir:
 | Etapa                      | Conteúdo principal                                            | Situação     |
 | -------------------------- | ------------------------------------------------------------- | ------------ |
 | 1. Fundamentos e estrutura | terminal, Next.js, App Router, JSX, CSS Modules e Git         | Concluída    |
-| 2. Rotas e componentes     | rotas, `Link`, layouts, `children`, props e composição        | Em andamento |
-| 3. React e interatividade  | estado, eventos, listas, formulários, filtros e imutabilidade | Iniciando    |
+| 2. Rotas e componentes     | rotas, `Link`, layouts, `children`, props e composição        | Concluída    |
+| 3. React e interatividade  | estado, eventos, listas, formulários, filtros e imutabilidade | Em andamento |
 | 4. Arquitetura do Next.js  | Server e Client Components, fluxo de dados, loading e erros   | Não iniciada |
 | 5. Backend e APIs          | HTTP, Route Handlers, JSON, validação e tratamento de erros   | Não iniciada |
 | 6. Prisma e PostgreSQL     | modelagem, migrations, relações, CRUD, filtros e transações   | Não iniciada |
@@ -201,7 +214,7 @@ src/app/page.js
 └── página inicial
 
 src/app/projetos/page.js
-└── página que fornece os dados dos projetos
+└── página que guarda o array e renderiza a lista de projetos
 
 src/components/Navegacao.js
 └── componente reutilizável responsável pela navegação
@@ -284,6 +297,27 @@ export default function CardProjeto({ nome, descricao, tecnologia }) {
 
 Assim, a estrutura do card permanece a mesma enquanto os dados podem mudar.
 
+### Arrays, objetos e listas
+
+Cada projeto agora é representado por um objeto com `id`, `nome`, `descricao` e `tecnologia`. Esses objetos ficam agrupados no array `projetos`.
+
+O método `map()` percorre o array e devolve um `CardProjeto` para cada objeto:
+
+```jsx
+{
+  projetos.map((projeto) => (
+    <CardProjeto
+      key={projeto.id}
+      nome={projeto.nome}
+      descricao={projeto.descricao}
+      tecnologia={projeto.tecnologia}
+    />
+  ));
+}
+```
+
+A propriedade `key` usa o identificador único do projeto para que o React consiga reconhecer cada elemento da lista durante as atualizações da interface.
+
 ## Método de cada sessão
 
 Cada sessão segue este ciclo:
@@ -311,30 +345,21 @@ Para evitar ambiguidades, toda orientação prática deve informar:
 - [Correção da rota de novo projeto](https://github.com/einelucas/web-fullstack-lab/commit/537b3f4793a93086277e0580855d84d0fbad06b1)
 - [Implementação da página de novo projeto](https://github.com/einelucas/web-fullstack-lab/commit/4152813e4a9f2d9d5847bc7628bff3ba96257303)
 - [Checkpoint — progresso da Sessão 3](https://github.com/einelucas/web-fullstack-lab/commit/847f40225d560752cf1cde62fe2808bb3abe5360)
+- [Sessão 4 — arrays e renderização de listas](https://github.com/einelucas/web-fullstack-lab/commit/91e99c8e8867bf22463d0c222331dfd7518a0a61)
 
 ## Próximo passo
 
-Na Sessão 4, os projetos deixarão de ser escritos manualmente assim:
-
-```jsx
-<CardProjeto ... />
-<CardProjeto ... />
-<CardProjeto ... />
-```
-
-e passarão a existir como dados:
+Na Sessão 5, cada projeto passará a ter uma página própria, usando seu `id` na URL:
 
 ```text
-Array de projetos
-       ↓
-     map()
-       ↓
-CardProjeto
-CardProjeto
-CardProjeto
+/projetos
+    ↓ seleção de um card
+/projetos/1
+    ↓
+Página de detalhes do projeto 1
 ```
 
-Isso será a base para posteriormente adicionar, remover, editar, filtrar e persistir projetos.
+Essa sessão apresentará as rotas dinâmicas do App Router e mostrará como uma única estrutura de página pode exibir projetos diferentes conforme o identificador presente na URL.
 
 ## Critério de conclusão
 
